@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FluentApiRestFull\FluentHttpClient.csproj" />
+    <ProjectReference Include="..\FluentRequestHttpClient\FluentRequestHttpClient.csproj" />
   </ItemGroup>
 
   <ItemGroup>

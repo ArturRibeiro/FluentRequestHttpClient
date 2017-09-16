@@ -3,7 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentRequestHttpClient", "src\FluentRequestHttpClient\FluentRequestHttpClient.csproj", "{4040BCD8-B46D-4847-BDFE-BFFE1080FAF6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentRequestHttpClient.Unit.Test", "src\FluentRequestHttpClient.Unit.Test\FluentRequestHttpClient.Unit.Test.csproj", "{2C6D0189-671A-4F62-AB76-6CBA2B9670E3}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4040BCD8-B46D-4847-BDFE-BFFE1080FAF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4040BCD8-B46D-4847-BDFE-BFFE1080FAF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4040BCD8-B46D-4847-BDFE-BFFE1080FAF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4040BCD8-B46D-4847-BDFE-BFFE1080FAF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C6D0189-671A-4F62-AB76-6CBA2B9670E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C6D0189-671A-4F62-AB76-6CBA2B9670E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C6D0189-671A-4F62-AB76-6CBA2B9670E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C6D0189-671A-4F62-AB76-6CBA2B9670E3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection

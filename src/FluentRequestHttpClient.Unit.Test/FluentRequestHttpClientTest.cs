@@ -21,7 +21,7 @@ namespace FluentHttpClient.Unit.Test
         public string Nome { get; set; }
     }
 
-    public class RestTest
+    public class FluentRequestHttpClientTest
     {
         [Theory]
         [InlineData(1)]
