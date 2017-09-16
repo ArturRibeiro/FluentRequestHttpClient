@@ -10,6 +10,9 @@ using FluentHttpClient.Intefarces;
 
 namespace FluentHttpClient
 {
+
+
+
 	public class Rest : IRest
 	{
 		#region Propriedades
