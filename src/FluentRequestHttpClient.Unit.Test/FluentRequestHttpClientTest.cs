@@ -23,51 +23,51 @@ namespace FluentHttpClient.Unit.Test
 
     public class FluentRequestHttpClientTest
     {
-        [Theory]
-        [InlineData(1)]
-        [InlineData(2)]
-        [InlineData(3)]
-        [InlineData(4)]
-        [InlineData(4)]
-        public void FromSeconds(int timeout)
-        {
-            using (var rest = new Rest())
-            {
-                rest.WithTimeout(timeout);
+        //[Theory]
+        //[InlineData(1)]
+        //[InlineData(2)]
+        //[InlineData(3)]
+        //[InlineData(4)]
+        //[InlineData(4)]
+        //public void FromSeconds(int timeout)
+        //{
+        //    using (var rest = new Rest())
+        //    {
+        //        rest.WithTimeout(timeout);
 
-                Assert.Equal(rest.TimeOut, TimeSpan.FromSeconds(timeout));
-            }
-        }
+        //        Assert.Equal(rest.TimeOut, TimeSpan.FromSeconds(timeout));
+        //    }
+        //}
 
-        [Theory()]
-        [InlineData("Accept", "text/html, image/*")]
-        [InlineData("Accept-Charset", "iso8859-5")]
-        [InlineData("Accept-Encoding", "gzip, compress")]
-        [InlineData("Accept-Language", "bt-br")]
-        [InlineData("Authorization", "012345679")]
-        public void Header(string name, string value)
-        {
-            using (var rest = new Rest())
-            {
-                rest.WithHeader(name, value);
+        //[Theory()]
+        //[InlineData("Accept", "text/html, image/*")]
+        //[InlineData("Accept-Charset", "iso8859-5")]
+        //[InlineData("Accept-Encoding", "gzip, compress")]
+        //[InlineData("Accept-Language", "bt-br")]
+        //[InlineData("Authorization", "012345679")]
+        //public void Header(string name, string value)
+        //{
+        //    using (var rest = new Rest())
+        //    {
+        //        rest.WithHeader(name, value);
 
-                Assert.True(rest.Headers.Keys.Any(x => x.Equals(name)));
-                Assert.Equal(rest.Headers[name], value);
-            }
-        }
+        //        Assert.True(rest.Headers.Keys.Any(x => x.Equals(name)));
+        //        Assert.Equal(rest.Headers[name], value);
+        //    }
+        //}
 
-        [Theory()]
-        [InlineData("https://github.com/Pathoschild/FluentHttpClient/blob/develop/Client")]
-        public void Uri(string url)
-        {
-            using (var rest = new Rest())
-            {
-                rest.WithBaseUrl(url);
+        //[Theory()]
+        //[InlineData("https://github.com/Pathoschild/FluentHttpClient/blob/develop/Client")]
+        //public void Uri(string url)
+        //{
+        //    using (var rest = new Rest())
+        //    {
+        //        rest.WithBaseUrl(url);
 
-                Assert.Equal(rest.Uri.AbsoluteUri, url + "/");
+        //        Assert.Equal(rest.Uri.AbsoluteUri, url + "/");
 
-            }
-        }
+        //    }
+        //}
 
         [Fact]
         public void CreateNewTest()
