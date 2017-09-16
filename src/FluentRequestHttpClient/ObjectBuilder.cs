@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using FluentHttpClient.Enuns;
+using FluentRequestHttpClient.Enuns;
 
-namespace FluentHttpClient
+namespace FluentRequestHttpClient
 {
 	public class ObjectBuilder<TResponse, TRequest> : IObjectBuilder<TResponse, TRequest>
 	{

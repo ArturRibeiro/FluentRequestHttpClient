@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FluentHttpClient.Intefarces
+namespace FluentRequestHttpClient.Intefarces
 {
 	public interface IRest : IDisposable
 	{

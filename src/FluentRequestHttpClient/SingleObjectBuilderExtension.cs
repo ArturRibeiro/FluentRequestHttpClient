@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using FluentHttpClient.Enuns;
+using FluentRequestHttpClient.Enuns;
 
-namespace FluentHttpClient
+namespace FluentRequestHttpClient
 {
 	public static class SingleObjectBuilderExtension
 	{

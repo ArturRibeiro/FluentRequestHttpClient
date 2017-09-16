@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using FluentHttpClient.Enuns;
+using FluentRequestHttpClient.Enuns;
 
-namespace FluentHttpClient
+namespace FluentRequestHttpClient
 {
 	public interface IObjectBuilder<TResponse, TRequest> : ISingleObjectBuilder<TResponse, TRequest>
 	{

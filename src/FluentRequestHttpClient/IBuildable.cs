@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FluentHttpClient
+namespace FluentRequestHttpClient
 {
 	public interface IBuildable<TResponse, TRequest> :  IDisposable
 	{

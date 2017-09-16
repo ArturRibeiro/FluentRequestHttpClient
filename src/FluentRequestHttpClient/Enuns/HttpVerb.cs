@@ -1,4 +1,4 @@
-﻿namespace FluentHttpClient.Enuns
+﻿namespace FluentRequestHttpClient.Enuns
 {
 	public enum HttpVerb
 	{

@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
-using FluentHttpClient;
-using FluentHttpClient.Enuns;
+using FluentRequestHttpClient;
+using FluentRequestHttpClient.Enuns;
 
-namespace FluentHttpClient.Unit.Test
+namespace FluentRequestHttpClient.Unit.Test
 {
     public class PessoaMessaResponse
     {
@@ -57,7 +57,7 @@ namespace FluentHttpClient.Unit.Test
         //}
 
         //[Theory()]
-        //[InlineData("https://github.com/Pathoschild/FluentHttpClient/blob/develop/Client")]
+        //[InlineData("https://github.com/Pathoschild/FluentRequestHttpClient/blob/develop/Client")]
         //public void Uri(string url)
         //{
         //    using (var rest = new Rest())

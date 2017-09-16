@@ -1,4 +1,4 @@
-﻿namespace FluentHttpClient
+﻿namespace FluentRequestHttpClient
 {
 
     /// <summary>
