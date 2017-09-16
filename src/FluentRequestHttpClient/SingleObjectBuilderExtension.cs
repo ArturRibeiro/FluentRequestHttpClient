@@ -23,6 +23,12 @@ namespace FluentRequestHttpClient
 			return objectBuilder;
 		}
 
+        public static ISingleObjectBuilder<TResponse, TRequest> AddRota<TResponse, TRequest>(this ISingleObjectBuilder<TResponse, TRequest> objectBuilder, string rota)
+		{
+			((IObjectBuilder<TResponse, TRequest>)objectBuilder).AddRota(rota);
+			return objectBuilder;
+		}
+
 		public static ISingleObjectBuilder<TResponse, TRequest> WithTimeout<TResponse, TRequest>(this ISingleObjectBuilder<TResponse, TRequest> objectBuilder, int timeout)
 		{
 			((IObjectBuilder<TResponse, TRequest>)objectBuilder).WithTimeout(timeout);

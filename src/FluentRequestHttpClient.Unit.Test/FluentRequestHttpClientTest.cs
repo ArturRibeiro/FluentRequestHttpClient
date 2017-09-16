@@ -1,15 +1,21 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Xunit;
 using FluentRequestHttpClient;
 using FluentRequestHttpClient.Enuns;
+using FluentRequestHttpClient.Response;
 
 namespace FluentRequestHttpClient.Unit.Test
 {
-    public class PessoaMessaResponse
+
+    public class PessoaMessaResponse : BaseResponseMessage
     {
-        public Dictionary<string, string> Headers { get; set; }
+        public int userId { get; set; }
+        public int id { get; set; }
+        public string title { get; set; }
+        public string body { get; set; }
     }
 
     public class PessoaMessaRequest
@@ -20,6 +26,8 @@ namespace FluentRequestHttpClient.Unit.Test
 
         public string Nome { get; set; }
     }
+
+
 
     public class FluentRequestHttpClientTest
     {
@@ -85,23 +93,24 @@ namespace FluentRequestHttpClient.Unit.Test
 
             var ob = new ObjectBuilder<PessoaMessaResponse, PessoaMessaRequest>();
 
-
-
-            var response = Builder<PessoaMessaResponse, PessoaMessaRequest>
+            var result = Builder<PessoaMessaResponse, PessoaMessaRequest>
                 .CreateNew()
                 .Authenticate("usuario", "senha")
                     .WithHeader("", "")
-                    .WithTimeout(93873)
+                    .WithTimeout(1000)
                     .WithArguments(new Dictionary<string, string>()
                     {
                         { "tetse", "teste" },
                         { "tetse1", "teste" },
                         { "tetse2", "teste" }
                     })
-                    .AddUri("https://transaction.stone.com.br/Sale/cancel")
+                    .AddUri("https://jsonplaceholder.typicode.com/")
+                    .AddRota("posts")
                     .SetVerb(HttpVerb.Get)
-                .Build();
+                .BuildAsync()
+                .Result;
 
+            Assert.True(result.IsSuccessStatusCode);
 
         }
     }

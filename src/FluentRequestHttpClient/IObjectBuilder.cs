@@ -12,7 +12,9 @@ namespace FluentRequestHttpClient
 
         ISingleObjectBuilder<TResponse, TRequest> AddUri(string uri);
 
-		ISingleObjectBuilder<TResponse, TRequest> WithTimeout(int timeout);
+	    ISingleObjectBuilder<TResponse, TRequest> AddRota(string rota);
+
+        ISingleObjectBuilder<TResponse, TRequest> WithTimeout(int timeout);
 
 		ISingleObjectBuilder<TResponse, TRequest> SetVerb(HttpVerb verb);
 
