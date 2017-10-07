@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using FluentRequestHttpClient.Enuns;
+using FluentRequestHttpClient.Parameters;
 
-namespace FluentRequestHttpClient
+namespace FluentRequestHttpClient.Intefarces
 {
 	public interface IObjectBuilder<TResponse, TRequest> : ISingleObjectBuilder<TResponse, TRequest>
 	{
@@ -18,9 +19,13 @@ namespace FluentRequestHttpClient
 
 		ISingleObjectBuilder<TResponse, TRequest> SetVerb(HttpVerb verb);
 
-		ISingleObjectBuilder<TResponse, TRequest> WithArguments(IDictionary<string, string> parameters);
-		
-		ISingleObjectBuilder<TResponse, TRequest> PostAsync();
+		ISingleObjectBuilder<TResponse, TRequest> WithArguments(IDictionary<string, string> arguments);
+
+        ISingleObjectBuilder<TResponse, TRequest> WithArguments(object arguments);
+
+        ISingleObjectBuilder<TResponse, TRequest> WithArguments(Action<ParameterQueryString> arguments);
+
+        ISingleObjectBuilder<TResponse, TRequest> PostAsync();
         
 	}
 }

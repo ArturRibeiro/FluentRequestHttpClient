@@ -2,7 +2,7 @@
 {
 	public enum HttpVerb
 	{
-        None = 0,
+        Undefined = 0,
 		Delete = 1,
 	    Get = 2,
         Head = 3,

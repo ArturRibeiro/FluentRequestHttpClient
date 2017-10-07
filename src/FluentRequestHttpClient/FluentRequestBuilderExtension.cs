@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using FluentRequestHttpClient.Enuns;
+using FluentRequestHttpClient.Intefarces;
+using System;
+using FluentRequestHttpClient.Parameters;
 
 namespace FluentRequestHttpClient
 {
-	public static class SingleObjectBuilderExtension
-	{
+    public static class FluentRequestBuilderExtension
+    {
 		public static ISingleObjectBuilder<TResponse, TRequest> Authenticate<TResponse, TRequest>(this ISingleObjectBuilder<TResponse, TRequest> objectBuilder, string user, string password)
 		{
 			((IObjectBuilder<TResponse, TRequest>)objectBuilder).Authenticate(user, password);
@@ -41,11 +44,22 @@ namespace FluentRequestHttpClient
 			return objectBuilder;
 		}
 
-		public static ISingleObjectBuilder<TResponse, TRequest> WithArguments<TResponse, TRequest>(this ISingleObjectBuilder<TResponse, TRequest> objectBuilder, IDictionary<string, string> parameters)
+		public static ISingleObjectBuilder<TResponse, TRequest> WithArguments<TResponse, TRequest>(this ISingleObjectBuilder<TResponse, TRequest> objectBuilder, IDictionary<string, string> arguments)
 		{
-			((IObjectBuilder<TResponse, TRequest>)objectBuilder).WithArguments(parameters);
+			((IObjectBuilder<TResponse, TRequest>)objectBuilder).WithArguments(arguments);
 			return objectBuilder;
 		}
 
-	}
+        public static ISingleObjectBuilder<TResponse, TRequest> WithArguments<TResponse, TRequest>(this ISingleObjectBuilder<TResponse, TRequest> objectBuilder, object arguments)
+        {
+            ((IObjectBuilder<TResponse, TRequest>)objectBuilder).WithArguments(arguments);
+            return objectBuilder;
+        }
+
+        public static ISingleObjectBuilder<TResponse, TRequest> WithArguments<TResponse, TRequest>(this ISingleObjectBuilder<TResponse, TRequest> objectBuilder, Action<ParameterQueryString> arguments)
+        {
+            ((IObjectBuilder<TResponse, TRequest>)objectBuilder).WithArguments(arguments);
+            return objectBuilder;
+        }
+    }
 }

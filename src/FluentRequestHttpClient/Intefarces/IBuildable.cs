@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace FluentRequestHttpClient
+namespace FluentRequestHttpClient.Intefarces
 {
 	public interface IBuildable<TResponse, TRequest> :  IDisposable
 	{

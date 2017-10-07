@@ -6,112 +6,83 @@ using Xunit;
 using FluentRequestHttpClient;
 using FluentRequestHttpClient.Enuns;
 using FluentRequestHttpClient.Response;
+using FluentRequestHttpClient.Parameters;
 
 namespace FluentRequestHttpClient.Unit.Test
 {
 
     public class PessoaMessaResponse : BaseResponseMessage
     {
-        public int userId { get; set; }
-        public int id { get; set; }
-        public string title { get; set; }
-        public string body { get; set; }
+        public string postId { get; set; }
+
     }
 
     public class PessoaMessaRequest
     {
-        public Dictionary<string, string> Headers { get; set; }
-
-        public int Id { get; set; }
-
-        public string Nome { get; set; }
+        public string postId { get; set; }
     }
 
-
+    //var ob = new ObjectBuilder<PessoaMessaResponse, PessoaMessaRequest>();
+    //var ob = new ObjectBuilder<PessoaMessaResponse, PessoaMessaRequest>();
 
     public class FluentRequestHttpClientTest
     {
-        //[Theory]
-        //[InlineData(1)]
-        //[InlineData(2)]
-        //[InlineData(3)]
-        //[InlineData(4)]
-        //[InlineData(4)]
-        //public void FromSeconds(int timeout)
-        //{
-        //    using (var rest = new Rest())
-        //    {
-        //        rest.WithTimeout(timeout);
-
-        //        Assert.Equal(rest.TimeOut, TimeSpan.FromSeconds(timeout));
-        //    }
-        //}
-
-        //[Theory()]
-        //[InlineData("Accept", "text/html, image/*")]
-        //[InlineData("Accept-Charset", "iso8859-5")]
-        //[InlineData("Accept-Encoding", "gzip, compress")]
-        //[InlineData("Accept-Language", "bt-br")]
-        //[InlineData("Authorization", "012345679")]
-        //public void Header(string name, string value)
-        //{
-        //    using (var rest = new Rest())
-        //    {
-        //        rest.WithHeader(name, value);
-
-        //        Assert.True(rest.Headers.Keys.Any(x => x.Equals(name)));
-        //        Assert.Equal(rest.Headers[name], value);
-        //    }
-        //}
-
-        //[Theory()]
-        //[InlineData("https://github.com/Pathoschild/FluentRequestHttpClient/blob/develop/Client")]
-        //public void Uri(string url)
-        //{
-        //    using (var rest = new Rest())
-        //    {
-        //        rest.WithBaseUrl(url);
-
-        //        Assert.Equal(rest.Uri.AbsoluteUri, url + "/");
-
-        //    }
-        //}
-
-        [Fact]
-        public void CreateNewTest()
+        [Theory]
+        [InlineData(HttpVerb.Get, "https://jsonplaceholder.typicode.com/", "comments", 1)]
+        public void ExecuteGetWithArguments(HttpVerb verb, string uri, string rota, string parameter)
         {
+            //ParameterQueryString
 
-            //var response =
-            //	this.HttpService.SubmitRequest<PedidoCreateRequest, PedidoCreateResponse>
-            //	(createRequest,
-            //		string.Concat(this.HostUri, EndPointResource),
-            //		HttpVerbEnum.Post,
-            //		HttpContentTypeEnum.json,
-            //		headers);
-
-            //1 - Utilizar os Verbos
-
-            var ob = new ObjectBuilder<PessoaMessaResponse, PessoaMessaRequest>();
-
-            var result = Builder<PessoaMessaResponse, PessoaMessaRequest>
+            var result = FluentBuilder<PessoaMessaResponse, PessoaMessaRequest>
                 .CreateNew()
                 .Authenticate("usuario", "senha")
                     .WithHeader("", "")
                     .WithTimeout(1000)
-                    .WithArguments(new Dictionary<string, string>()
-                    {
-                        { "tetse", "teste" },
-                        { "tetse1", "teste" },
-                        { "tetse2", "teste" }
-                    })
-                    .AddUri("https://jsonplaceholder.typicode.com/")
-                    .AddRota("posts")
+                    .WithArguments(x => ParameterQueryString.Factor.Create("nome", "1"))
+                    .AddUri(uri)
+                    .AddRota(rota)
                     .SetVerb(HttpVerb.Get)
                 .BuildAsync()
                 .Result;
 
             Assert.True(result.IsSuccessStatusCode);
+        }
 
+        [Theory]
+        [InlineData(HttpVerb.Get, "https://jsonplaceholder.typicode.com/", "posts")]
+        [InlineData(HttpVerb.Get, "https://jsonplaceholder.typicode.com/", "posts/1")]
+        [InlineData(HttpVerb.Get, "https://jsonplaceholder.typicode.com/", "posts/1/comments")]
+        public void ExecuteGet(HttpVerb verb, string uri, string rota)
+        {
+            var result = FluentBuilder<PessoaMessaResponse, PessoaMessaRequest>
+                .CreateNew()
+                .Authenticate("usuario", "senha")
+                    .WithHeader("", "")
+                    .WithTimeout(1000)
+                    .AddUri(uri)
+                    .AddRota(rota)
+                    .SetVerb(HttpVerb.Get)
+                .BuildAsync()
+                .Result;
+
+            Assert.True(result.IsSuccessStatusCode);
+        }
+
+        [Theory]
+        [InlineData(HttpVerb.Put, "", "", "https://jsonplaceholder.typicode.com/", "posts/1")]
+        public void ExecutePutWithArguments(HttpVerb verb, string user, string password, string uri, string rota)
+        {
+            var result = FluentBuilder<PessoaMessaResponse, PessoaMessaRequest>
+                .CreateNew()
+                    .Authenticate(user, password)
+                    .WithHeader("", "")
+                    .AddUri(uri)
+                    .AddRota(rota)
+                    .SetVerb(verb)
+                .BuildAsync()
+                .Result;
+
+            Assert.True(result.IsSuccessStatusCode);
         }
     }
 }
