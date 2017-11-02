@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
+using System.Net;
 using Xunit;
-using FluentRequestHttpClient;
 using FluentRequestHttpClient.Enuns;
 using FluentRequestHttpClient.Response;
 using FluentRequestHttpClient.Parameters;
+using FluentRequestHttpClient.Request;
 
 namespace FluentRequestHttpClient.Unit.Test
 {
@@ -17,13 +14,10 @@ namespace FluentRequestHttpClient.Unit.Test
 
     }
 
-    public class CommentMessageRequest
+    public class CommentMessageRequest : BaseRequestMessage
     {
         public string postId { get; set; }
     }
-
-    //var ob = new ObjectBuilder<PessoaMessaResponse, PessoaMessaRequest>();
-    //var ob = new ObjectBuilder<PessoaMessaResponse, PessoaMessaRequest>();
 
     public class FluentRequestHttpClientTest
     {
@@ -31,21 +25,20 @@ namespace FluentRequestHttpClient.Unit.Test
         [InlineData(HttpVerb.Get, "https://jsonplaceholder.typicode.com/", "comments", 1)]
         public void ExecuteGetWithArguments(HttpVerb verb, string uri, string rota, string parameter)
         {
-            //ParameterQueryString
-
-            var result = FluentBuilder<CommentMessageResponse, CommentMessageRequest>
-                .CreateNew()
-                .Authenticate("usuario", "senha")
+            var result = FluentBuilder
+                .CreateNewList()
+                    .Authenticate("usuario", "senha")
                     .WithHeader("MerchantKey", "7b379c45-57d6-4508-ae56-29bb0b3c9741")
                     .WithTimeout(1000)
                     .WithArguments(x => ParameterQueryString.Factor.Create("nome", "1"))
                     .AddUri(uri)
                     .AddRota(rota)
                     .SetVerb(HttpVerb.Get)
-                .GetAsync()
+                .GetAsync<CommentMessageRequest, CommentMessageResponse>()
                 .Result;
 
-            //Assert.True(result.IsSuccessStatusCode);
+            Assert.True(result.IsSuccessStatusCode);
+            Assert.Equal(result.StatusCode, HttpStatusCode.OK);
         }
 
         [Theory]
@@ -54,7 +47,7 @@ namespace FluentRequestHttpClient.Unit.Test
         [InlineData(HttpVerb.Get, "https://jsonplaceholder.typicode.com/", "posts/1/comments")]
         public void ExecuteGet(HttpVerb verb, string uri, string rota)
         {
-            var result = FluentBuilder<CommentMessageResponse, CommentMessageRequest>
+            var result = FluentBuilder
                 .CreateNew()
                 .Authenticate("usuario", "senha")
                     .WithHeader("", "")
@@ -62,27 +55,29 @@ namespace FluentRequestHttpClient.Unit.Test
                     .AddUri(uri)
                     .AddRota(rota)
                     .SetVerb(HttpVerb.Get)
-                .GetAsync()
+                .GetAsync<CommentMessageRequest, CommentMessageResponse>()
                 .Result;
 
-            //Assert.True(result.IsSuccessStatusCode);
+            Assert.True(result.IsSuccessStatusCode);
+            Assert.Equal(result.StatusCode, HttpStatusCode.OK);
         }
 
         [Theory]
         [InlineData(HttpVerb.Put, "", "", "https://jsonplaceholder.typicode.com/", "posts/1")]
         public void ExecutePutWithArguments(HttpVerb verb, string user, string password, string uri, string rota)
         {
-            var result = FluentBuilder<CommentMessageResponse, CommentMessageRequest>
+            var result = FluentBuilder
                 .CreateNew()
                     .Authenticate(user, password)
                     .WithHeader("", "")
                     .AddUri(uri)
                     .AddRota(rota)
                     .SetVerb(verb)
-                .GetAsync()
+                .GetAsync<CommentMessageRequest, CommentMessageResponse>()
                 .Result;
 
-            //Assert.True(result.IsSuccessStatusCode);
+            Assert.True(result.IsSuccessStatusCode);
+            Assert.Equal(result.StatusCode, HttpStatusCode.OK);
         }
     }
 }

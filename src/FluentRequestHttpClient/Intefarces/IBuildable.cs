@@ -6,14 +6,10 @@ using FluentRequestHttpClient.Response;
 
 namespace FluentRequestHttpClient.Intefarces
 {
-	public interface IBuildable<TResponse, TRequest> :  IDisposable
-	    //where TResponse : BaseResponseMessage, new()
-        //where TRequest : BaseRequestMessage, new()
+	public interface IBuildable :  IDisposable
     {
-        //BuilderSettings BuilderSettings { get; set; }
-	    Task<TResponse> GetAsync();
-
-
-        TResponse Build();
-	}
+        Task<TResponse> GetAsync<TRequest, TResponse>() 
+            where TRequest : BaseRequestMessage 
+            where TResponse : BaseResponseMessage, new();
+    }
 }

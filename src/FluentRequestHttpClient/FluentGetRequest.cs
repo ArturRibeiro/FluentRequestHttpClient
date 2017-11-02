@@ -8,9 +8,7 @@ using FluentRequestHttpClient.Response;
 
 namespace FluentRequestHttpClient
 {
-    public class FluentGetRequest<TResponse>
-    //where TRequest : BaseRequestMessage
-    //where TResponse : BaseResponseMessage, new()
+    public class FluentGetRequest
     {
         private readonly FluentHttpSetup _setup;
 
@@ -27,7 +25,7 @@ namespace FluentRequestHttpClient
                 client.BaseAddress = new Uri(_setup.Uri, _setup.Rota);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                //client.Timeout = new TimeSpan(_setup.Timeout.Value);
+                client.Timeout = new TimeSpan(_setup.Timeout.Value);
 
                 var uri = _setup.Arguments.Count > 0 ? $"{_setup.Rota}?{_setup.Arguments}" : _setup.Rota;
 

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using FluentRequestHttpClient.Enuns;
 using FluentRequestHttpClient.Parameters;
@@ -10,84 +8,68 @@ using FluentRequestHttpClient.Intefarces;
 using FluentRequestHttpClient.Extensions;
 using FluentRequestHttpClient.Request;
 using FluentRequestHttpClient.Response;
-using System.IO;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using System.Net;
 
 namespace FluentRequestHttpClient
 {
-    public class FluentRequestBuilder<TResponse, TRequest> : IObjectBuilder<TResponse, TRequest>
+    public class FluentRequestBuilder : IObjectBuilder
     {
-        private string _USER;
-        private string _PASSWORD;
-        
-        private HttpClient _httpClient;
         public FluentHttpSetup _setup;
 
 
         public FluentRequestBuilder()
         {
             _setup = new FluentHttpSetup();
-            _USER = null;
-            _PASSWORD = null;
         }
 
 
-        public ISingleObjectBuilder<TResponse, TRequest> Authenticate(string user, string password)
+        public ISingleObjectBuilder Authenticate(string user, string password)
         {
-            _USER = user;
-            _PASSWORD = password;
-
+            //TODO: 
             return this;
         }
 
-        public ISingleObjectBuilder<TResponse, TRequest> WithHeader(string key, string value)
+        public ISingleObjectBuilder WithHeader(string key, string value)
         {
             _setup.DefaultRequestHeaders.Add(key, value);
 
             return this;
         }
 
-        public ISingleObjectBuilder<TResponse, TRequest> AddUri(string uri)
+        public ISingleObjectBuilder AddUri(string uri)
         {
             _setup.Uri = new Uri(uri);
 
             return this;
         }
 
-        public ISingleObjectBuilder<TResponse, TRequest> AddRota(string rota)
+        public ISingleObjectBuilder AddRota(string rota)
         {
             _setup.Rota = rota;
 
             return this;
         }
 
-        public ISingleObjectBuilder<TResponse, TRequest> WithTimeout(int timeout)
+        public ISingleObjectBuilder WithTimeout(int timeout)
         {
             _setup.Timeout = timeout;
 
             return this;
         }
 
-        public ISingleObjectBuilder<TResponse, TRequest> SetVerb(HttpVerb verb)
+        public ISingleObjectBuilder SetVerb(HttpVerb verb)
         {
             _setup.HttpVerb = verb;
 
             return this;
         }
 
-        public ISingleObjectBuilder<TResponse, TRequest> WithArguments(IDictionary<string, string> parameters)
+        public ISingleObjectBuilder WithArguments(IDictionary<string, string> parameters)
         {
             return this;
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="arguments"></param>
-        /// <returns></returns>
-        public ISingleObjectBuilder<TResponse, TRequest> WithArguments(object arguments)
+        
+        public ISingleObjectBuilder WithArguments(object arguments)
         {
             arguments.ToDictionary()
                 .Select(x => ParameterQueryString.Factor.Create(x.Key, x.Value))
@@ -97,49 +79,37 @@ namespace FluentRequestHttpClient
             return this;
         }
 
-        public ISingleObjectBuilder<TResponse, TRequest> WithArguments(Action<ParameterQueryString> arguments)
+        public ISingleObjectBuilder WithArguments(Action<ParameterQueryString> arguments)
         {
-            //arguments.ToDictionary()
-            //    .Select(x => ParameterQueryString.Factor.Create(x.Key, x.Value))
-            //    .ToList()
-            //    .ForEach(x => _arguments.Add(x));
+            arguments.ToDictionary()
+                .Select(x => ParameterQueryString.Factor.Create(x.Key, x.Value))
+                .ToList()
+                .ForEach(x => _setup.Arguments.Add(x));
 
             return this;
         }
 
-        public ISingleObjectBuilder<TResponse, TRequest> PostAsync()
+        public ISingleObjectBuilder PostAsync()
         {
             return this;
         }
 
-        public TResponse Build()
+
+        public async Task<TResponse> GetAsync<TRequest, TResponse>() 
+            where TRequest : BaseRequestMessage
+            where TResponse : BaseResponseMessage, new()
         {
-            throw new NotImplementedException();
-        }
-
-        
-
-        public async Task<TResponse> GetAsync()
-        {
-            return await this.DoRequestAsync<TResponse>();
-
-        }
-
-        public void Dispose()
-        {
-            _setup = null;
-            _USER = null;
-            _PASSWORD = null;
+            return await this.DoRequestAsync<TRequest, TResponse>();
         }
 
         #region Private Methods
 
-        private async Task<TResponse> DoRequestAsync<TResponse>()
-            //where TRequest : BaseRequestMessage
-            //where TResponse : BaseResponseMessage, new()
+        private async Task<TResponse> DoRequestAsync<TRequest, TResponse>() 
+            where TRequest : BaseRequestMessage
+            where TResponse : BaseResponseMessage, new()
         {
-            var responseMessage = await new FluentGetRequest<TResponse>(_setup).ExecuteAsync();
-
+            var responseMessage = await new FluentGetRequest(_setup).ExecuteAsync();
+            
             switch (responseMessage.StatusCode)
             {
                 case HttpStatusCode.BadRequest:
@@ -174,11 +144,17 @@ namespace FluentRequestHttpClient
                     }
             }
 
-            var response = await responseMessage.ReadResponse2<TResponse>().ConfigureAwait(false);
-
-            return response;
+            return await responseMessage
+                .ReadResponse<TRequest, TResponse>()
+                .ConfigureAwait(false);
         }
 
         #endregion
+
+        public void Dispose()
+        {
+            _setup = null;
+
+        }
     }
 }

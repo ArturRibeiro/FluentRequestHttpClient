@@ -8,57 +8,57 @@ namespace FluentRequestHttpClient
 {
     public static class FluentRequestBuilderExtension
     {
-		public static ISingleObjectBuilder<TResponse, TRequest> Authenticate<TResponse, TRequest>(this ISingleObjectBuilder<TResponse, TRequest> objectBuilder, string user, string password)
+		public static ISingleObjectBuilder Authenticate(this ISingleObjectBuilder objectBuilder, string user, string password)
 		{
-			((IObjectBuilder<TResponse, TRequest>)objectBuilder).Authenticate(user, password);
+			((IObjectBuilder)objectBuilder).Authenticate(user, password);
 			return objectBuilder;
 		}
 
-	    public static ISingleObjectBuilder<TResponse, TRequest> WithHeader<TResponse, TRequest>(this ISingleObjectBuilder<TResponse, TRequest> objectBuilder, string key, string value)
+	    public static ISingleObjectBuilder WithHeader(this ISingleObjectBuilder objectBuilder, string key, string value)
 	    {
-	        ((IObjectBuilder<TResponse, TRequest>)objectBuilder).WithHeader(key, value);
+	        ((IObjectBuilder)objectBuilder).WithHeader(key, value);
 	        return objectBuilder;
         }
 
-        public static ISingleObjectBuilder<TResponse, TRequest> AddUri<TResponse, TRequest>(this ISingleObjectBuilder<TResponse, TRequest> objectBuilder, string uri)
+        public static ISingleObjectBuilder AddUri(this ISingleObjectBuilder objectBuilder, string uri)
 		{
-			((IObjectBuilder<TResponse, TRequest>)objectBuilder).AddUri(uri);
+			((IObjectBuilder)objectBuilder).AddUri(uri);
 			return objectBuilder;
 		}
 
-        public static ISingleObjectBuilder<TResponse, TRequest> AddRota<TResponse, TRequest>(this ISingleObjectBuilder<TResponse, TRequest> objectBuilder, string rota)
+        public static ISingleObjectBuilder AddRota(this ISingleObjectBuilder objectBuilder, string rota)
 		{
-			((IObjectBuilder<TResponse, TRequest>)objectBuilder).AddRota(rota);
+			((IObjectBuilder)objectBuilder).AddRota(rota);
 			return objectBuilder;
 		}
 
-		public static ISingleObjectBuilder<TResponse, TRequest> WithTimeout<TResponse, TRequest>(this ISingleObjectBuilder<TResponse, TRequest> objectBuilder, int timeout)
+		public static ISingleObjectBuilder WithTimeout(this ISingleObjectBuilder objectBuilder, int timeout)
 		{
-			((IObjectBuilder<TResponse, TRequest>)objectBuilder).WithTimeout(timeout);
+			((IObjectBuilder)objectBuilder).WithTimeout(timeout);
 			return objectBuilder;
 		}
 
-		public static ISingleObjectBuilder<TResponse, TRequest> SetVerb<TResponse, TRequest>(this ISingleObjectBuilder<TResponse, TRequest> objectBuilder, HttpVerb verb)
+		public static ISingleObjectBuilder SetVerb(this ISingleObjectBuilder objectBuilder, HttpVerb verb)
 		{
-			((IObjectBuilder<TResponse, TRequest>)objectBuilder).SetVerb(verb);
+			((IObjectBuilder)objectBuilder).SetVerb(verb);
 			return objectBuilder;
 		}
 
-		public static ISingleObjectBuilder<TResponse, TRequest> WithArguments<TResponse, TRequest>(this ISingleObjectBuilder<TResponse, TRequest> objectBuilder, IDictionary<string, string> arguments)
+		public static ISingleObjectBuilder WithArguments(this ISingleObjectBuilder objectBuilder, IDictionary<string, string> arguments)
 		{
-			((IObjectBuilder<TResponse, TRequest>)objectBuilder).WithArguments(arguments);
+			((IObjectBuilder)objectBuilder).WithArguments(arguments);
 			return objectBuilder;
 		}
 
-        public static ISingleObjectBuilder<TResponse, TRequest> WithArguments<TResponse, TRequest>(this ISingleObjectBuilder<TResponse, TRequest> objectBuilder, object arguments)
+        public static ISingleObjectBuilder WithArguments(this ISingleObjectBuilder objectBuilder, object arguments)
         {
-            ((IObjectBuilder<TResponse, TRequest>)objectBuilder).WithArguments(arguments);
+            ((IObjectBuilder)objectBuilder).WithArguments(arguments);
             return objectBuilder;
         }
 
-        public static ISingleObjectBuilder<TResponse, TRequest> WithArguments<TResponse, TRequest>(this ISingleObjectBuilder<TResponse, TRequest> objectBuilder, Action<ParameterQueryString> arguments)
+        public static ISingleObjectBuilder WithArguments(this ISingleObjectBuilder objectBuilder, Action<ParameterQueryString> arguments)
         {
-            ((IObjectBuilder<TResponse, TRequest>)objectBuilder).WithArguments(arguments);
+            ((IObjectBuilder)objectBuilder).WithArguments(arguments);
             return objectBuilder;
         }
     }
