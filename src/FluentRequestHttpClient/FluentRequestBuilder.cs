@@ -8,6 +8,12 @@ using FluentRequestHttpClient.Parameters;
 using System.Linq;
 using FluentRequestHttpClient.Intefarces;
 using FluentRequestHttpClient.Extensions;
+using FluentRequestHttpClient.Request;
+using FluentRequestHttpClient.Response;
+using System.IO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System.Net;
 
 namespace FluentRequestHttpClient
 {
@@ -15,25 +21,16 @@ namespace FluentRequestHttpClient
     {
         private string _USER;
         private string _PASSWORD;
-        private Uri _uri;
-        private string _rota;
-        private int? _timeout;
-        private HttpVerb _verb;
-        private IDictionary<string, string> _headers;
-        private ParameterQueryStringCollection _arguments;
+        
         private HttpClient _httpClient;
+        public FluentHttpSetup _setup;
+
 
         public FluentRequestBuilder()
         {
-            _headers = new Dictionary<string, string>();
-            _arguments = new ParameterQueryStringCollection();
-
+            _setup = new FluentHttpSetup();
             _USER = null;
             _PASSWORD = null;
-            _uri = null; ;
-            _rota = null; ;
-            _timeout = null;
-            _verb = HttpVerb.Undefined;
         }
 
 
@@ -47,35 +44,35 @@ namespace FluentRequestHttpClient
 
         public ISingleObjectBuilder<TResponse, TRequest> WithHeader(string key, string value)
         {
-            _headers.Add(key, value);
+            _setup.DefaultRequestHeaders.Add(key, value);
 
             return this;
         }
 
         public ISingleObjectBuilder<TResponse, TRequest> AddUri(string uri)
         {
-            _uri = new Uri(uri);
+            _setup.Uri = new Uri(uri);
 
             return this;
         }
 
         public ISingleObjectBuilder<TResponse, TRequest> AddRota(string rota)
         {
-            _rota = rota;
+            _setup.Rota = rota;
 
             return this;
         }
 
         public ISingleObjectBuilder<TResponse, TRequest> WithTimeout(int timeout)
         {
-            _timeout = timeout;
+            _setup.Timeout = timeout;
 
             return this;
         }
 
         public ISingleObjectBuilder<TResponse, TRequest> SetVerb(HttpVerb verb)
         {
-            _verb = verb;
+            _setup.HttpVerb = verb;
 
             return this;
         }
@@ -95,7 +92,7 @@ namespace FluentRequestHttpClient
             arguments.ToDictionary()
                 .Select(x => ParameterQueryString.Factor.Create(x.Key, x.Value))
                 .ToList()
-                .ForEach(x => _arguments.Add(x));
+                .ForEach(x => _setup.Arguments.Add(x));
 
             return this;
         }
@@ -120,71 +117,68 @@ namespace FluentRequestHttpClient
             throw new NotImplementedException();
         }
 
-        public async Task<HttpResponseMessage> BuildAsync()
+        
+
+        public async Task<TResponse> GetAsync()
         {
-            try
-            {
-                switch (this._verb)
-                {
-                    case HttpVerb.Undefined: break;
-                    case HttpVerb.Delete: break;
-                    case HttpVerb.Get: { return await ExecuteGet(); }
-                    case HttpVerb.Head: break;
-                    case HttpVerb.Put: break;
-                    case HttpVerb.OPTIONS: break;
-                    case HttpVerb.Post: break;
-                    case HttpVerb.Trace: break;
-                    default:
-                        break;
-                }
+            return await this.DoRequestAsync<TResponse>();
 
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-
-            throw new NotImplementedException("The verb was not implemented");
-        }
-
-        private async Task<HttpResponseMessage> ExecuteGet()
-        {
-            using (var client = new HttpClient { BaseAddress = _uri })
-            {
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                //client.Timeout = new TimeSpan(this.timeout);
-
-                var url = _arguments.Count > 0 ? $"{_rota}?{_arguments.ToString()}" : _rota;
-
-                var response = await client.GetAsync(url);
-
-                response.EnsureSuccessStatusCode();
-                var body = await response.Content.ReadAsStringAsync();
-
-                //new ObjectContent<Foo>(foo,
-                //    Configuration.Formatters.JsonFormatter)
-
-                //var result = JsonConvert.DeserializeObject<IList<TResponse>>(body);
-
-                response.Content = new StringContent(body);
-
-                return response;
-            }
         }
 
         public void Dispose()
         {
-            _headers = null;
-            _arguments = null;
-
+            _setup = null;
             _USER = null;
             _PASSWORD = null;
-            _uri = null; ;
-            _rota = null; ;
-            _timeout = null;
-            _verb = HttpVerb.Undefined;
         }
+
+        #region Private Methods
+
+        private async Task<TResponse> DoRequestAsync<TResponse>()
+            //where TRequest : BaseRequestMessage
+            //where TResponse : BaseResponseMessage, new()
+        {
+            var responseMessage = await new FluentGetRequest<TResponse>(_setup).ExecuteAsync();
+
+            switch (responseMessage.StatusCode)
+            {
+                case HttpStatusCode.BadRequest:
+                    {
+                        //AdicionaMensagem("HTTP-400", "Request mal formado.", response);
+                        break;
+                    }
+                case HttpStatusCode.Forbidden:
+                    {
+                        //AdicionaMensagem("HTTP-403", "Request proibido. O servidor recusou a requisição. ", response);
+                        break;
+                    }
+                case HttpStatusCode.InternalServerError:
+                    {
+                        //AdicionaMensagem("HTTP-500", string.Concat("Ocorreu um erro interno ao servidor.", responseMessage.ReasonPhrase, ". Retorno: ", JsonConvert.SerializeObject(response)), response);
+                        break;
+                    }
+                case HttpStatusCode.NotFound:
+                    {
+                        //AdicionaMensagem("HTTP-404", "Recurso não encontrado no servidor.", response);
+                        break;
+                    }
+                case HttpStatusCode.ServiceUnavailable:
+                    {
+                        //AdicionaMensagem("HTTP-503", "Serviço indisponível.", response);
+                        break;
+                    }
+                case HttpStatusCode.Unauthorized:
+                    {
+                        //AdicionaMensagem("HTTP-401", "O acesso a este recurso não está autorizado.", response);
+                        break;
+                    }
+            }
+
+            var response = await responseMessage.ReadResponse2<TResponse>().ConfigureAwait(false);
+
+            return response;
+        }
+
+        #endregion
     }
 }
